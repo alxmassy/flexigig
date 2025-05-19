@@ -25,7 +25,7 @@ export default function Register() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true)
-      await signUp(data.email, data.password)
+      await signUp(data.email, data.password, 'student')
       navigate('/dashboard')
     } catch (error) {
       console.error('Registration error:', error)

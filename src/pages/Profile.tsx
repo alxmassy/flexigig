@@ -9,12 +9,13 @@ interface ProfileFormData {
   location: string
   bio: string
   skills: string[]
+  business_name?: string
+  business_description?: string
 }
 
 export default function Profile() {
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
-  const [isEditing, setIsEditing] = useState(false)
   const userRole = user?.user_metadata?.role || 'student'
 
   const {
@@ -60,7 +61,6 @@ export default function Profile() {
         })
 
       if (error) throw error
-      setIsEditing(false)
     } catch (error) {
       console.error('Error updating profile:', error)
     } finally {
@@ -244,13 +244,6 @@ export default function Profile() {
             )}
 
             <div className="flex justify-end gap-x-4">
-              <button
-                type="button"
-                onClick={() => setIsEditing(false)}
-                className="rounded-md bg-gray-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-              >
-                Cancel
-              </button>
               <button
                 type="submit"
                 className="rounded-md bg-primary-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"

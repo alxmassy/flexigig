@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
-import { MapPinIcon, CurrencyDollarIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline'
 
 interface Job {
   id: string
@@ -77,14 +77,6 @@ export default function Dashboard() {
       currency: 'INR',
       maximumFractionDigits: 0
     }).format(amount)
-  }
-
-  const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('en-IN', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    })
   }
 
   const formatDate = (dateString: string) => {

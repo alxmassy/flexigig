@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { testJobs, testBusinesses } from '../data/testData'
-import { MapPinIcon, CurrencyDollarIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline'
 
 export default function Jobs() {
   const [searchTerm, setSearchTerm] = useState('')
