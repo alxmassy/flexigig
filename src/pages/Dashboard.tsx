@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
-import { MapPinIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline'
 
 interface Job {
   id: string
