@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../contexts/AuthContext'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 
 interface LoginFormData {
   email: string
@@ -12,6 +13,7 @@ export default function Login() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const {
     register,
     handleSubmit,
@@ -78,13 +80,13 @@ export default function Login() {
               >
                 Password
               </label>
-              <div className="mt-1">
+              <div className="mt-1 relative">
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 bg-gray-700 text-white focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm placeholder-gray-400 bg-gray-700 text-white focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm pr-10"
                   {...register('password', {
                     required: 'Password is required',
                     minLength: {
@@ -93,6 +95,17 @@ export default function Login() {
                     },
                   })}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-primary-400 transition-colors duration-200 focus:outline-none bg-transparent"
+                >
+                  {showPassword ? (
+                    <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" aria-hidden="true" />
+                  )}
+                </button>
                 {errors.password && (
                   <p className="mt-2 text-sm text-red-500">
                     {errors.password.message}
