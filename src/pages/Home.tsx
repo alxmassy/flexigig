@@ -5,7 +5,7 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [expandedFeature, setExpandedFeature] = useState<number | null>(null)
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
-  const featureRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [isMobile, setIsMobile] = useState(false)
 
   const images = [
     {
@@ -91,70 +91,47 @@ export default function Home() {
 
   const reviews = [
     {
-      name: "Sarah Johnson",
-      role: "Computer Science Student",
+      name: "Priya Sharma",
+      role: "Computer Science Student, IIT Delhi",
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80",
-      text: "FlexiGig has been a game-changer for my college experience. I can easily find shifts that fit around my classes and study time."
+      text: "FlexiGig has been amazing for my college experience. I can easily find shifts that fit around my classes at IIT Delhi. The pay rates are competitive and the businesses are trustworthy."
     },
     {
-      name: "Michael Chen",
-      role: "Business Student",
+      name: "Arjun Patel",
+      role: "Business Student, NMIMS Mumbai",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80",
-      text: "The platform is incredibly user-friendly. I've found multiple part-time opportunities that have helped me gain real-world experience."
+      text: "The platform is incredibly user-friendly. I've found multiple part-time opportunities in Mumbai that have helped me gain real-world experience while studying at NMIMS."
     },
     {
-      name: "Emma Rodriguez",
-      role: "Engineering Student",
+      name: "Ananya Reddy",
+      role: "Engineering Student, BITS Pilani",
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-      text: "I love how transparent the pay rates are. No more guessing about compensation - everything is clear from the start."
+      text: "I love how transparent the pay rates are. No more guessing about compensation - everything is clear from the start. The ₹500-800 per hour range is perfect for students."
     },
     {
-      name: "David Kim",
-      role: "Marketing Student",
+      name: "Rahul Verma",
+      role: "Marketing Student, Symbiosis Pune",
       image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80",
-      text: "The verification process for businesses gives me peace of mind. I know I'm working with legitimate employers."
+      text: "The verification process for businesses gives me peace of mind. I know I'm working with legitimate employers in Pune. The platform has helped me build my professional network."
     },
     {
-      name: "Sophia Patel",
-      role: "Psychology Student",
+      name: "Meera Kapoor",
+      role: "Psychology Student, DU Delhi",
       image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1288&q=80",
-      text: "FlexiGig has helped me balance my studies with work perfectly. The flexible scheduling is exactly what I needed."
+      text: "FlexiGig has helped me balance my studies at Delhi University with work perfectly. The flexible scheduling is exactly what I needed, and the pay is great for a student."
     }
   ]
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = featureRefs.current.findIndex((ref) => ref === entry.target)
-            setTimeout(() => {
-              setExpandedFeature(index)
-            }, 300)
-          } else {
-            const index = featureRefs.current.findIndex((ref) => ref === entry.target)
-            if (expandedFeature === index) {
-              setExpandedFeature(null)
-            }
-          }
-        })
-      },
-      {
-        threshold: 0.5,
-        rootMargin: '-100px'
-      }
-    )
-
-    featureRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref)
-    })
-
-    return () => {
-      featureRefs.current.forEach((ref) => {
-        if (ref) observer.unobserve(ref)
-      })
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
     }
-  }, [expandedFeature])
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -171,6 +148,14 @@ export default function Home() {
 
     return () => clearInterval(interval)
   }, [])
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount)
+  }
 
   return (
     <div className="w-screen bg-gray-900">
@@ -197,7 +182,9 @@ export default function Home() {
               Find Your Perfect Part-Time Job
             </h1>
             <p className="mt-4 sm:mt-6 text-lg sm:text-xl text-white max-w-3xl mx-auto">
-              Connect with local businesses and find flexible work opportunities that fit your schedule.
+              Connect with local businesses and find flexible work opportunities
+              <br />
+              that fit your schedule.
             </p>
             <div className="mt-6 sm:mt-10">
               <Link
@@ -212,7 +199,7 @@ export default function Home() {
       </div>
 
       {/* Features section */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white">
             Why Choose FlexiGig?
@@ -222,12 +209,16 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mt-12 sm:mt-16 space-y-8">
+        <div className="mt-8 sm:mt-12 space-y-4 max-w-3xl mx-auto">
           {features.map((feature, index) => (
             <div
               key={index}
-              ref={(el) => (featureRefs.current[index] = el)}
-              className={`bg-gray-800 rounded-lg p-6 transition-all duration-700 ease-in-out transform max-w-2xl mx-auto ${
+              onClick={() => isMobile && setExpandedFeature(expandedFeature === index ? null : index)}
+              onMouseEnter={() => !isMobile && setExpandedFeature(index)}
+              onMouseLeave={() => !isMobile && setExpandedFeature(null)}
+              className={`bg-gray-800 rounded-lg p-4 transition-all duration-500 ease-in-out transform ${
+                isMobile ? 'cursor-pointer' : ''
+              } ${
                 expandedFeature === index
                   ? 'scale-105 shadow-xl'
                   : 'scale-100'
@@ -237,15 +228,15 @@ export default function Home() {
                 <div className="text-primary-400 flex-shrink-0">
                   {feature.icon}
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-white">
+                <div className="ml-3 flex-1">
+                  <h3 className="text-base font-medium text-white">
                     {feature.title}
                   </h3>
-                  <p className="mt-2 text-base text-gray-300">
+                  <p className="mt-1 text-sm text-gray-300">
                     {feature.description}
                   </p>
                   <div
-                    className={`mt-4 text-gray-300 overflow-hidden transition-all duration-700 ease-in-out ${
+                    className={`mt-2 text-sm text-gray-300 overflow-hidden transition-all duration-500 ease-in-out ${
                       expandedFeature === index
                         ? 'max-h-96 opacity-100'
                         : 'max-h-0 opacity-0'
@@ -271,7 +262,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="relative max-w-3xl mx-auto h-[300px]">
+        <div className="relative max-w-3xl mx-auto h-[300px] sm:h-[300px] md:h-[350px]">
           {reviews.map((review, index) => (
             <div
               key={index}
@@ -283,7 +274,7 @@ export default function Home() {
                   : 'opacity-0 translate-x-full'
               }`}
             >
-              <div className="bg-white rounded-xl p-8 shadow-xl">
+              <div className="bg-white rounded-xl p-8 shadow-xl h-[280px] sm:h-auto">
                 <div className="flex items-center space-x-4 mb-6">
                   <img
                     src={review.image}
@@ -307,13 +298,13 @@ export default function Home() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-gray-600 text-lg italic">"{review.text}"</p>
+                <p className="text-gray-600 text-lg italic line-clamp-3 sm:line-clamp-none">"{review.text}"</p>
               </div>
             </div>
           ))}
           
           {/* Review navigation dots */}
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-12 flex space-x-2">
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-24 sm:translate-y-8 flex space-x-2">
             {reviews.map((_, index) => (
               <button
                 key={index}

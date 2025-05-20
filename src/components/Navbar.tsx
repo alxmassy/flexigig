@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../contexts/AuthContext'
 
 const navigation = [
@@ -15,7 +15,7 @@ export default function Navbar() {
   const location = useLocation()
 
   return (
-    <Disclosure as="nav" className="bg-gray-900/80 backdrop-blur-md shadow-lg fixed w-full z-50">
+    <Disclosure as="nav" className="bg-gray-900/80 backdrop-blur-md shadow-lg fixed w-full z-[100]">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -26,15 +26,15 @@ export default function Navbar() {
                     FlexiGig
                   </Link>
                 </div>
-                <div className="hidden sm:ml-12 sm:flex sm:space-x-8">
+                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   {navigation.map((item) => (
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200 ${
+                      className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
                         location.pathname === item.href
-                          ? 'border-primary-500 text-white'
-                          : 'border-transparent hover:border-primary-500'
+                          ? 'border-b-2 border-primary-400 text-white'
+                          : 'border-b-2 border-transparent text-gray-300 hover:border-gray-300 hover:text-white'
                       }`}
                     >
                       {item.name}
@@ -42,171 +42,142 @@ export default function Navbar() {
                   ))}
                 </div>
               </div>
-
-              <div className="hidden sm:flex sm:items-center">
+              <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 {user ? (
-                  <Menu as="div" className="relative ml-3">
-                    <div>
-                      <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                  <div className="flex items-center space-x-2 ml-4">
+                    <Menu as="div" className="relative">
+                      <Menu.Button className="flex rounded-full bg-gray-900/80 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200">
                         <span className="sr-only">Open user menu</span>
-                        <div className="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center">
-                          <span className="text-white font-medium">
-                            {user.email?.[0].toUpperCase()}
-                          </span>
-                        </div>
+                        <img
+                          className="h-8 w-8 rounded-full object-cover"
+                          src="/Alex_pfp.jpeg"
+                          alt="Student profile"
+                        />
                       </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-200"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-gray-800 py-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <div className="px-4 py-3 border-b border-gray-700">
+                            <p className="text-sm text-gray-300">Signed in as</p>
+                            <p className="text-sm font-medium text-white truncate">{user.email}</p>
+                          </div>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/profile"
+                                className={`flex items-center px-4 py-2 text-sm ${
+                                  active ? 'bg-gray-700 text-white' : 'text-gray-300'
+                                }`}
+                              >
+                                <UserCircleIcon className="h-5 w-5 mr-3" />
+                                Your Profile
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                    <span
+                      onClick={() => signOut()}
+                      className="text-primary-400 hover:text-primary-300 text-sm font-medium cursor-pointer transition-all duration-200 bg-gray-800 px-3 py-1.5 rounded-full"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              to="/profile"
-                              className={`${
-                                active ? 'bg-gray-700' : ''
-                              } block px-4 py-2 text-sm text-gray-300`}
-                            >
-                              Your Profile
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <button
-                              onClick={() => signOut()}
-                              className={`${
-                                active ? 'bg-gray-700' : ''
-                              } block w-full text-left px-4 py-2 text-sm text-gray-300`}
-                            >
-                              Sign out
-                            </button>
-                          )}
-                        </Menu.Item>
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
+                      Sign out
+                    </span>
+                  </div>
                 ) : (
-                  <div className="space-x-4">
+                  <div className="flex items-center space-x-4">
                     <Link
                       to="/login"
                       className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium"
                     >
-                      Sign in
+                      Log in
                     </Link>
                     <Link
                       to="/register"
-                      className="bg-primary-500 text-white hover:bg-primary-400 px-3 py-2 rounded-md text-sm font-medium"
+                      className="bg-primary-500 text-white hover:bg-primary-400 px-4 py-2 rounded-md text-sm font-medium"
                     >
                       Sign up
                     </Link>
                   </div>
                 )}
               </div>
-
               <div className="-mr-2 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-primary-400 hover:text-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 bg-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
                   ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                    </svg>
                   )}
                 </Disclosure.Button>
               </div>
             </div>
           </div>
 
-          <Transition
-            enter="transition duration-200 ease-out"
-            enterFrom="transform translate-x-full"
-            enterTo="transform translate-x-0"
-            leave="transition duration-200 ease-in"
-            leaveFrom="transform translate-x-0"
-            leaveTo="transform translate-x-full"
-          >
-            <Disclosure.Panel className="sm:hidden">
-              <div className="bg-gray-800/95 backdrop-blur-md shadow-lg">
-                <div className="space-y-1 px-2 pb-3 pt-2">
-                  {navigation.map((item) => (
-                    <Disclosure.Button
-                      key={item.name}
-                      as={Link}
-                      to={item.href}
-                      className={`block rounded-lg px-3 py-2 text-base font-medium ${
-                        location.pathname === item.href
-                          ? 'bg-gray-700 text-white'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      }`}
-                    >
-                      {item.name}
-                    </Disclosure.Button>
-                  ))}
-                </div>
-
-                {user ? (
-                  <div className="border-t border-gray-700 pb-3 pt-4">
-                    <div className="flex items-center px-4">
-                      <div className="flex-shrink-0">
-                        <div className="h-10 w-10 rounded-full bg-primary-500 flex items-center justify-center">
-                          <span className="text-white font-medium">
-                            {user.email?.[0].toUpperCase()}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="ml-3">
-                        <div className="text-base font-medium text-gray-300">
-                          {user.email}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-3 space-y-1 px-2">
-                      <Disclosure.Button
-                        as={Link}
-                        to="/profile"
-                        className="block rounded-lg px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        Your Profile
-                      </Disclosure.Button>
-                      <Disclosure.Button
-                        as="button"
-                        onClick={() => signOut()}
-                        className="block w-full text-left rounded-lg px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        Sign out
-                      </Disclosure.Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="border-t border-gray-700 pb-3 pt-4">
-                    <div className="space-y-1 px-2">
-                      <Disclosure.Button
-                        as={Link}
-                        to="/login"
-                        className="block rounded-lg px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        Sign in
-                      </Disclosure.Button>
-                      <Disclosure.Button
-                        as={Link}
-                        to="/register"
-                        className="block rounded-lg px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        Sign up
-                      </Disclosure.Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Disclosure.Panel>
-          </Transition>
+          <Disclosure.Panel className="sm:hidden">
+            <div className="space-y-1 px-2 pb-3 pt-2">
+              {navigation.map((item) => (
+                <Disclosure.Button
+                  key={item.name}
+                  as={Link}
+                  to={item.href}
+                  className={`block rounded-lg px-3 py-2 text-base font-medium ${
+                    location.pathname === item.href
+                      ? 'bg-gray-700 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                  }`}
+                >
+                  {item.name}
+                </Disclosure.Button>
+              ))}
+              {user ? (
+                <>
+                  <Disclosure.Button
+                    as={Link}
+                    to="/profile"
+                    className="block rounded-lg px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  >
+                    Your Profile
+                  </Disclosure.Button>
+                  <Disclosure.Button
+                    as="button"
+                    onClick={() => signOut()}
+                    className="block mx-auto w-fit text-center rounded-lg px-2 py-1.5 text-sm font-medium text-primary-400 hover:text-primary-300 bg-white hover:bg-gray-50"
+                  >
+                    Sign out
+                  </Disclosure.Button>
+                </>
+              ) : (
+                <>
+                  <Disclosure.Button
+                    as={Link}
+                    to="/login"
+                    className="block rounded-lg px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  >
+                    Log in
+                  </Disclosure.Button>
+                  <Disclosure.Button
+                    as={Link}
+                    to="/register"
+                    className="block rounded-lg px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                  >
+                    Sign up
+                  </Disclosure.Button>
+                </>
+              )}
+            </div>
+          </Disclosure.Panel>
         </>
       )}
     </Disclosure>
