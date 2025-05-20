@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import { StarIcon } from '@heroicons/react/20/solid'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -148,14 +150,6 @@ export default function Home() {
 
     return () => clearInterval(interval)
   }, [])
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(amount)
-  }
 
   return (
     <div className="w-screen bg-gray-900">
