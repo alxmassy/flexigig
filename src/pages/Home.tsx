@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
-import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
