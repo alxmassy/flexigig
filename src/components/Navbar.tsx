@@ -18,9 +18,9 @@ export default function Navbar() {
     <Disclosure as="nav" className="bg-gray-900/80 backdrop-blur-md shadow-lg fixed w-full z-[100]">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-4 lg:px-6">
             <div className="flex h-16 justify-between">
-              <div className="flex">
+              <div className="flex -ml-2 sm:-ml-4">
                 <div className="flex flex-shrink-0 items-center">
                   <Link to="/" className="flex items-center space-x-2">
                     <img
@@ -28,7 +28,7 @@ export default function Navbar() {
                       alt="FlexiGig Logo"
                       className="h-8 w-14"
                     />
-                    <span className="text-2xl font-bold text-primary-400">
+                    <span className="hidden sm:block text-2xl font-bold text-primary-400">
                       FlexiGig
                     </span>
                   </Link>
